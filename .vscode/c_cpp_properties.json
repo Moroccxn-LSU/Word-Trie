@@ -3,17 +3,28 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/local/include",
+ "/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1",
+ "/Library/Developer/CommandLineTools/usr/lib/clang/13.0.0/include",
+ "/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include",
+ "/Library/Developer/CommandLineTools/usr/include",
+ "/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks"
             ],
-            "defines": [],
+            "defines": [
+                "__LITTLE_ENDIAN__"
+            ],
             "macFrameworkPath": [
-                "/System/Library/Frameworks",
-                "/Library/Frameworks"
+                "/System/Library/Frameworks"
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "macos-gcc-x64"
+            "intelliSenseMode": "macos-clang-x64",
+            "forcedInclude": [],
+            "browse": {
+                "path": []
+            }
         }
     ],
     "version": 4
