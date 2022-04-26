@@ -16,15 +16,14 @@ class Node {
         bool isWord;
         Node* rightSibling;
         Node* firstChild;
+
+        Node(char c) {
+            leadChar = c;
+            isWord = false;
+            rightSibling = nullptr;
+            firstChild = nullptr;
+        }
 };
-Node* convertCharToNode(char c) {
-    Node* newNode = new Node();
-    newNode->leadChar = c;
-    newNode->isWord = false;
-    newNode->rightSibling = nullptr;
-    newNode->firstChild = nullptr;
-    return newNode;
-}
 void preorder(Node* root, string prefix, string forbidden) {
     if (root == nullptr) { 
         return; 
@@ -43,12 +42,13 @@ void preorder(Node* root, string prefix, string forbidden) {
         }
     }
 }
+//Issue is here when stall is trying to be inserted it says root->firstchild->rightsibling is null
 Node* findChild(Node* root, char c) {
-    /*if (root == nullptr) {
+    if (root->firstChild == nullptr) {
         return nullptr;
-    }*/
+    }
     Node* q = root->firstChild;
-    if (q != nullptr) {
+    if (q->rightSibling != nullptr) {
         while (q->leadChar != c) {
             q = q->rightSibling;
         }
@@ -75,16 +75,12 @@ void insert(Node* root, string s) {
         return;
     }
     char c = s[0];
-    Node* r = convertCharToNode(c);
-    //root->firstChild = r;
     string ss = s.substr(1, s.length());
     Node* q = findChild(root, c);
     if (q == nullptr) {
-        //Node* r = convertCharToNode(c);
-        if (root != nullptr) {
-            r->rightSibling = root->firstChild;
-            root->firstChild = r;
-        }
+        Node* r = new Node(c);
+        r->rightSibling = root->firstChild;
+        root->firstChild = r;
         insert(r, ss);
     }
     else {
@@ -92,14 +88,24 @@ void insert(Node* root, string s) {
     }
 }
 int main(){
-    ifstream f("WORD.LST");
-    Node* root = convertCharToNode('\0');
-    string word;
+    ifstream f("inputFile.txt");
+    Node* root = new Node('\0');
+    string word, instruction, prefix, forbidden;
+    int numInstructions;
+    
+    f >> numInstructions;
 
-    while (f >> word) {
-        if (word.length() >= 4) {
+    while (f >> instruction) {
+        if (instruction == "IN") {
+            f >> word;
             insert(root, word);
         }
+        else if (instruction == "QU") {
+            f >> prefix;
+            f >> forbidden;
+            Query(root, prefix, forbidden);
+        }
     }
+    return 0;
 }
 
