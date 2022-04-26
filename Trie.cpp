@@ -1,7 +1,7 @@
 // Adam Elkhanoufi
 // CSC 3102
 // Word Trie
-// 04/20/2022
+// 04/23/2022
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -24,6 +24,7 @@ class Node {
             firstChild = nullptr;
         }
 };
+//Check if forbidden is being read and used properly
 void preorder(Node* root, string prefix, string forbidden) {
     if (root == nullptr) { 
         return; 
@@ -69,6 +70,7 @@ void Query(Node* root, string qprefix, string forbidden) {
     Node* q = search(root, qprefix);
     preorder(q, qprefix, forbidden);
 }
+//Insert works properly
 void insert(Node* root, string s) {
     if (s.empty()) {
         root->isWord = true;
@@ -87,6 +89,7 @@ void insert(Node* root, string s) {
         insert(q, ss);
     }
 }
+//Find a way to traverse the trie and output it to see if findchild is working properly
 int main(){
     ifstream f("inputFile.txt");
     Node* root = new Node('\0');
@@ -104,6 +107,7 @@ int main(){
             f >> prefix;
             f >> forbidden;
             Query(root, prefix, forbidden);
+            //Should output "Stall, Steal, Start" for working code
         }
     }
     return 0;
