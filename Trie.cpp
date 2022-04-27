@@ -1,46 +1,45 @@
 // Adam Elkhanoufi
 // CSC 3102
 // Word Trie
-// 04/23/2022
+// 04/20/2022
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
 using namespace std;
+int i = 0;
 
 class Node {
-    public:
+public:
 
-        char leadChar;
-        bool isWord;
-        Node* rightSibling;
-        Node* firstChild;
+    char leadChar;
+    bool isWord;
+    Node* rightSibling;
+    Node* firstChild;
 
-        Node(char c) {
-            leadChar = c;
-            isWord = false;
-            rightSibling = nullptr;
-            firstChild = nullptr;
-        }
+    Node(char c) {
+        leadChar = c;
+        isWord = false;
+        rightSibling = nullptr;
+        firstChild = nullptr;
+    }
 };
-//Check if forbidden is being read and used properly
 void preorder(Node* root, string prefix, string forbidden) {
-    if (root == nullptr) { 
-        return; 
+    if (root == nullptr) {
+        return;
     }
-    if (root->isWord) { 
-        cout << prefix << endl;
+    if (root->isWord) {
+        i++;
+        //cout << prefix << endl;
     }
-    prefix = prefix + root->leadChar;
     Node* q = root->firstChild;
     while (q != nullptr) {
-        if (forbidden.find(q->leadChar) < forbidden.length()) {
-            q = q->rightSibling;
-        }
-        else {
+        if (forbidden.find(q->leadChar) == string::npos) {
+            prefix += q->leadChar;
             preorder(q, prefix, forbidden);
         }
+        q = q->rightSibling;
     }
 }
 //Issue is here when stall is trying to be inserted it says root->firstchild->rightsibling is null
@@ -49,10 +48,8 @@ Node* findChild(Node* root, char c) {
         return nullptr;
     }
     Node* q = root->firstChild;
-    if (q->rightSibling != nullptr) {
-        while (q->leadChar != c) {
-            q = q->rightSibling;
-        }
+    while (q != nullptr && q->leadChar != c) {
+        q = q->rightSibling;
     }
     return q;
 }
@@ -67,10 +64,10 @@ Node* search(Node* root, string qprefix) {
     return search(q, qprefix.substr(1, qprefix.length()));
 }
 void Query(Node* root, string qprefix, string forbidden) {
+    int counter = 0;
     Node* q = search(root, qprefix);
     preorder(q, qprefix, forbidden);
 }
-//Insert works properly
 void insert(Node* root, string s) {
     if (s.empty()) {
         root->isWord = true;
@@ -89,13 +86,25 @@ void insert(Node* root, string s) {
         insert(q, ss);
     }
 }
-//Find a way to traverse the trie and output it to see if findchild is working properly
-int main(){
-    ifstream f("inputFile.txt");
+int main() {
+    fstream ff("WORD.LST");
+    fstream f("inputFile.txt");
     Node* root = new Node('\0');
-    string word, instruction, prefix, forbidden;
+    string word, prefix, forbidden;
+
+    while (ff >> word) {
+        if (word.length() == 5) {
+            insert(root, word);
+        }
+    }
+    f >> prefix >> forbidden;
+    Query(root, prefix, forbidden);
+    cout << i << endl;
+    return 0;
+}
+    /*string word, instruction, prefix, forbidden;
     int numInstructions;
-    
+
     f >> numInstructions;
 
     while (f >> instruction) {
@@ -107,9 +116,8 @@ int main(){
             f >> prefix;
             f >> forbidden;
             Query(root, prefix, forbidden);
-            //Should output "Stall, Steal, Start" for working code
         }
     }
-    return 0;
-}
+    return 0;*/
+
 
