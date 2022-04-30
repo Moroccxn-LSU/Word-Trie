@@ -60,7 +60,6 @@ Node* search(Node* root, string qprefix) {
     return search(q, qprefix.substr(1, qprefix.length()));
 }
 void Query(Node* root, string qprefix, string forbidden) {
-    int counter = 0;
     Node* q = search(root, qprefix);
     preorder(q, qprefix, forbidden);
 }
